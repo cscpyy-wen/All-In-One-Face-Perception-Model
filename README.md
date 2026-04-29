@@ -2,8 +2,6 @@
 
 本项目是一个基于 Vision Transformer 的多任务人脸感知模型。可同时完成 **6 项人脸分析任务**：
 
-| 任务 |
-|---|---|---|
 | 人脸识别 (Face Recognition) 
 | 年龄估计 (Age Estimation) 
 | 表情识别 (Expression Recognition)
