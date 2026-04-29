@@ -1,0 +1,46 @@
+# =============================================================================
+# Moeface — .gitignore
+# =============================================================================
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ---- Model weights & large files ----
+demo/checkpoint/
+Moeface_project/pretrain/
+*.pth
+*.pth.tar
+*.onnx
+*.whl
+
+# ---- Runtime output ----
+demo/__tmp_app__/
+demo/infer_outputs/
+demo/batch_results/
+demo/direct_results/
+
+# ---- Temp / cache ----
+_tmp/
+_wheels/
+*.tmp
+*.bak
+
+# ---- IDE / OS ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---- Claude Code ----
+.claude/
+
+# ---- Environment ----
+moeface_env_freeze.txt

@@ -1,0 +1,176 @@
+runtime:
+  device: "cuda"
+  fp16: false
+  output_dir: "infer_outputs"
+
+paths:
+  checkpoint: "checkpoint/the_writer.pth.tar"
+  farl_pretrain: "../Moeface_project/pretrain/FaRL-Base-Patch16-LAIONFace20M-ep64.pth"
+  image: "image/2978322154_1.jpg"
+
+model:
+  backbone:
+    type: "FaRLVisualFeatures"
+    kwargs:
+      model_type: "base"
+      model_path: ""
+      drop_path_rate: 0.2
+      forced_input_resolution: 512
+
+  heads:
+    type: "DecoderNewHolder"
+    kwargs:
+      task_names:
+        - "recog_ms1mv3"
+        - "age_morph2"
+        - "age_utkface"
+        - "biattr_celeba"
+        - "affect_affectnet"
+        - "affect_rafdb"
+        - "affect_ferplus"
+        - "parsing_celebam"
+        - "parsing_lapa"
+        - "align_300w"
+        - "align_cofw"
+        - "align_wflw"
+        - "align_aflw"
+      query_nums: [2, 101, 101, 40, 7, 7, 7, 19, 11, 68, 29, 98, 19]
+      interpreter_types:
+        - "feature_v2"
+        - "value"
+        - "value"
+        - "value"
+        - "value"
+        - "value"
+        - "value"
+        - "map_v2"
+        - "map_v2"
+        - "map_v2"
+        - "map_v2"
+        - "map_v2"
+        - "map_v2"
+      out_types:
+        - "None"
+        - "None"
+        - "None"
+        - "None"
+        - "None"
+        - "None"
+        - "None"
+        - "ParsingOutput"
+        - "ParsingOutput"
+        - "AlignOutput"
+        - "AlignOutput"
+        - "AlignOutput"
+        - "AlignOutput"
+      decoder_type: "TransformerDecoderLevel"
+      levels: [11]
+
+  model_entry:
+    type: "aio_entry"
+    kwargs:
+      size_group:
+        group_0:
+          task_types: ["recog", "age", "biattr", "affect"]
+          input_size: 112
+        group_1:
+          task_types: ["parsing", "align"]
+          input_size: 512
+
+tasks:
+  recog:
+    task_name: "recog_ms1mv3"
+    input_size: 112
+
+  age:
+    task_name: "age_utkface"
+    input_size: 112
+
+  attribute:
+    task_name: "biattr_celeba"
+    input_size: 112
+
+  expression:
+    task_name: "affect_affectnet"
+    input_size: 112
+
+  parsing:
+    task_name: "parsing_celebam"
+    input_size: 512
+
+  align:
+    task_name: "align_wflw"
+    input_size: 512
+
+labels:
+  expression:
+    - "neutral"
+    - "happy"
+    - "sad"
+    - "surprise"
+    - "fear"
+    - "disgust"
+    - "anger"
+
+  attribute:
+    - "5_o_Clock_Shadow"
+    - "Arched_Eyebrows"
+    - "Attractive"
+    - "Bags_Under_Eyes"
+    - "Bald"
+    - "Bangs"
+    - "Big_Lips"
+    - "Big_Nose"
+    - "Black_Hair"
+    - "Blond_Hair"
+    - "Blurry"
+    - "Brown_Hair"
+    - "Bushy_Eyebrows"
+    - "Chubby"
+    - "Double_Chin"
+    - "Eyeglasses"
+    - "Goatee"
+    - "Gray_Hair"
+    - "Heavy_Makeup"
+    - "High_Cheekbones"
+    - "Male"
+    - "Mouth_Slightly_Open"
+    - "Mustache"
+    - "Narrow_Eyes"
+    - "No_Beard"
+    - "Oval_Face"
+    - "Pale_Skin"
+    - "Pointy_Nose"
+    - "Receding_Hairline"
+    - "Rosy_Cheeks"
+    - "Sideburns"
+    - "Smiling"
+    - "Straight_Hair"
+    - "Wavy_Hair"
+    - "Wearing_Earrings"
+    - "Wearing_Hat"
+    - "Wearing_Lipstick"
+    - "Wearing_Necklace"
+    - "Wearing_Necktie"
+    - "Young"
+
+  parsing:
+    - "background"
+    - "neck"
+    - "face"
+    - "cloth"
+    - "rr"
+    - "lr"
+    - "rb"
+    - "lb"
+    - "re"
+    - "le"
+    - "nose"
+    - "imouth"
+    - "llip"
+    - "ulip"
+    - "hair"
+    - "glass"
+    - "hat"
+    - "earr"
+    - "neckl"
