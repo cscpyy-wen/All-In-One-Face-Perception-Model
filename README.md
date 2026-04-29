@@ -69,18 +69,18 @@ Two model files are required for inference:
 | File | Size | Path |
 |---|---|---|
 | `the_writer.pth.tar` | ~1.8 GB | `demo/checkpoint/` |
-| `FaRL-Base-Patch16-LAIONFace20M-ep64.pth` | ~650 MB | `Moeface_project/pretrain/` |
+| `FaRL-Base-Patch16-LAIONFace20M-ep64.pth` | ~622 MB | `Moeface_project/pretrain/` |
 
 ```bash
 # Create directories
 mkdir -p demo/checkpoint Moeface_project/pretrain
 
-# Download (replace with actual download links)
-# wget <download_url> -O demo/checkpoint/the_writer.pth.tar
-# wget <download_url> -O Moeface_project/pretrain/FaRL-Base-Patch16-LAIONFace20M-ep64.pth
-```
+# Download checkpoint
+wget https://github.com/cscpyy-wen/All-In-One-Face-Perception-Model/releases/download/v1/the_writer.pth.tar -O demo/checkpoint/the_writer.pth.tar
 
-> See the [Releases](../../releases) page for download links.
+# Download FaRL pretrained weights
+wget https://github.com/cscpyy-wen/All-In-One-Face-Perception-Model/releases/download/v1/FaRL-Base-Patch16-LAIONFace20M-ep64.pth -O Moeface_project/pretrain/FaRL-Base-Patch16-LAIONFace20M-ep64.pth
+```
 
 ### 3. Launch Web Demo
 
