@@ -1,161 +1,161 @@
 # All-In-One Multi-Task Face Perception Model
 
-本项目是一个基于 Vision Transformer 的多任务人脸感知模型。可同时完成 **6 项人脸分析任务**：
+A unified multi-task face perception model based on Vision Transformer. A single forward pass performs **6 face analysis tasks** simultaneously:
 
-| 任务 |
+| Task |
 |---|
-| 人脸识别 (Face Recognition) |
-| 年龄估计 (Age Estimation) |
-| 表情识别 (Expression Recognition) |
-| 属性分析 (Attribute Analysis) |
-| 人脸解析 (Face Parsing) |
-| 关键点检测 (Landmark Detection) |
+| Face Recognition |
+| Age Estimation |
+| Expression Recognition |
+| Attribute Analysis |
+| Face Parsing |
+| Landmark Detection |
 
 ```
 Moeface/
-├── Moeface_project/          # 模型核心代码
+├── Moeface_project/          # Core model code
 │   ├── core/
-│   │   ├── model/            # 模型定义（backbone、heads、loss）
-│   │   ├── data/             # 数据加载
-│   │   ├── evaluator/        # 评估模块
-│   │   ├── solver/           # 训练求解器
-│   │   └── transform/        # 数据增强
-│   ├── train.py              # 训练入口
-│   └── test.py               # 测试入口
+│   │   ├── model/            # Model definition (backbone, heads, loss)
+│   │   ├── data/             # Data loading
+│   │   ├── evaluator/        # Evaluation modules
+│   │   ├── solver/           # Training solver
+│   │   └── transform/        # Data augmentation
+│   ├── train.py              # Training entry
+│   └── test.py               # Testing entry
 │
-├── demo/                     # 交互式 Web 演示
-│   ├── app.py                # Gradio 演示入口
-│   ├── inference/            # 推理引擎模块
-│   │   ├── config.py         # 配置管理
-│   │   ├── model.py          # 模型加载
-│   │   ├── preprocess.py     # 人脸检测 + 预处理
-│   │   ├── result_parser.py  # 结果解析
-│   │   ├── visualizer.py     # 可视化
-│   │   ├── pipeline.py       # 推理管线
-│   │   └── stream.py         # 实时视频流
-│   ├── ui/                   # UI 组件
-│   │   ├── styles.py         # CSS 样式
-│   │   └── translations.py   # 中文翻译
-│   ├── scripts/              # 命令行脚本
-│   ├── infer.yaml            # 推理配置
-│   ├── checkpoint/           # 模型权重（需下载）
-│   └── image/                # 测试图片
+├── demo/                     # Interactive web demo
+│   ├── app.py                # Gradio demo entry
+│   ├── inference/            # Inference engine modules
+│   │   ├── config.py         # Configuration management
+│   │   ├── model.py          # Model loading
+│   │   ├── preprocess.py     # Face detection & preprocessing
+│   │   ├── result_parser.py  # Result parsing
+│   │   ├── visualizer.py     # Visualization
+│   │   ├── pipeline.py       # Inference pipeline
+│   │   └── stream.py         # Real-time video stream
+│   ├── ui/                   # UI components
+│   │   ├── styles.py         # CSS styles
+│   │   └── translations.py   # Chinese translations
+│   ├── scripts/              # CLI scripts
+│   ├── infer.yaml            # Inference config
+│   ├── checkpoint/           # Model weights (download required)
+│   └── image/                # Test images
 │
 ├── requirements.txt
 ├── LICENSE
 └── .gitignore
 ```
 
-## 快速开始
+## Getting Started
 
-### 1. 环境配置
+### 1. Environment Setup
 
 ```bash
-# 创建 conda 环境
+# Create conda environment
 conda create -n moeface python=3.9 -y
 conda activate moeface
 
-# 安装 PyTorch（CUDA 12.4）
+# Install PyTorch (CUDA 12.4)
 pip install torch==2.6.0+cu124 torchvision==0.21.0+cu124 --index-url https://download.pytorch.org/whl/cu124
 
-# 安装其他依赖
+# Install other dependencies
 pip install -r requirements.txt
 ```
 
-### 2. 下载模型权重
+### 2. Download Model Weights
 
-运行推理需要下载两个模型文件：
+Two model files are required for inference:
 
-| 文件 | 大小 | 放置位置 |
+| File | Size | Path |
 |---|---|---|
 | `the_writer.pth.tar` | ~1.8 GB | `demo/checkpoint/` |
 | `FaRL-Base-Patch16-LAIONFace20M-ep64.pth` | ~650 MB | `Moeface_project/pretrain/` |
 
 ```bash
-# 创建目录
+# Create directories
 mkdir -p demo/checkpoint Moeface_project/pretrain
 
-# 下载（替换为实际的下载链接）
+# Download (replace with actual download links)
 # wget <download_url> -O demo/checkpoint/the_writer.pth.tar
 # wget <download_url> -O Moeface_project/pretrain/FaRL-Base-Patch16-LAIONFace20M-ep64.pth
 ```
 
-> 模型权重下载链接请参见 [Releases](../../releases) 页面。
+> See the [Releases](../../releases) page for download links.
 
-### 3. 启动 Web Demo
+### 3. Launch Web Demo
 
 ```bash
 cd demo
 python app.py
 ```
 
-浏览器会自动打开 `http://localhost:7860`，支持三种输入模式：
+The browser will open `http://localhost:7860` automatically. Three input modes are supported:
 
-- **上传图片** — 拖拽或点击上传
-- **摄像头拍照** — 点击摄像头图标拍照后分析
-- **实时视频** — 打开摄像头实时分析（~3 FPS）
+- **Image Upload** — Drag and drop or click to upload
+- **Webcam Snapshot** — Take a photo and analyze
+- **Real-time Video** — Live camera stream analysis (~3 FPS)
 
-### 4. 命令行推理
+### 4. CLI Inference
 
 ```bash
 cd demo
 
-# 单张图片推理
+# Single image inference
 python scripts/infer.py --infer_config infer.yaml
 
-# 批量推理（处理 image/ 目录下所有图片）
+# Batch inference (processes all images in image/)
 python scripts/batch_infer.py
 
-# 直接推理（无人脸检测，直接 resize 整张图）
+# Direct inference (no face detection, resize whole image)
 python scripts/infer_direct.py --infer_config infer.yaml
 ```
 
-## 技术细节
+## Technical Details
 
-### 推理流程
+### Inference Pipeline
 
 ```
-输入图片 → InsightFace 人脸检测 → 双分辨率裁剪
-                                         │
-                        ┌────────────────┴────────────────┐
-                        │                                 │
-                   112×112 裁剪                       512×512 裁剪
-                        │                                 │
-              ┌─────────┼─────────┐             ┌─────────┼─────────┐
-              ▼         ▼         ▼             ▼         ▼         ▼
-           Recognition  Age   Expression    Parsing  Landmark
-            Attribute
+Input Image → InsightFace Detection → Dual-resolution Cropping
+                                           │
+                          ┌────────────────┴────────────────┐
+                          │                                 │
+                     112×112 crop                       512×512 crop
+                          │                                 │
+                ┌─────────┼─────────┐             ┌─────────┼─────────┐
+                ▼         ▼         ▼             ▼         ▼         ▼
+             Recognition  Age   Expression    Parsing  Landmark
+              Attribute
 ```
 
-### 支持的任务与标签
+### Supported Tasks & Labels
 
-**表情 (7 类):** 中性、高兴、伤心、惊讶、害怕、厌恶、愤怒
+**Expression (7 classes):** neutral, happy, sad, surprise, fear, disgust, anger
 
-**属性 (40 项):** 性别、发色、是否戴眼镜、是否微笑、是否有刘海 等 40 项 CelebA 属性
+**Attribute (40 items):** 40 binary CelebA attributes including gender, hair color, eyeglasses, smiling, bangs, etc.
 
-**人脸解析 (19 类):** 背景、脖子、脸、衣服、眉毛、眼睛、虹膜、鼻子、嘴唇、头发、眼镜、帽子、耳环、项链
+**Face Parsing (19 classes):** background, neck, face, cloth, eyebrows, eyes, iris, nose, lips, hair, glasses, hat, earring, necklace
 
-**关键点:** 98 个面部关键点（基于 WFLW 数据集）
+**Landmarks:** 98 facial landmarks (WFLW dataset)
 
-## 依赖说明
+## Dependencies
 
-| 包 | 用途 |
+| Package | Purpose |
 |---|---|
-| PyTorch >= 2.6 | 深度学习框架 |
-| Gradio >= 4.0 | Web 演示界面 |
-| InsightFace | 人脸检测 |
-| timm | ViT 模型组件 |
-| OpenCV | 图像处理 |
-| easydict | 配置管理 |
+| PyTorch >= 2.6 | Deep learning framework |
+| Gradio >= 4.0 | Web demo interface |
+| InsightFace | Face detection |
+| timm | ViT model components |
+| OpenCV | Image processing |
+| easydict | Configuration management |
 
-完整列表见 `requirements.txt`。
+See `requirements.txt` for the full list.
 
-## 许可证
+## License
 
-本项目基于 [MIT License](LICENSE) 开源。
+This project is licensed under the [MIT License](LICENSE).
 
-## 致谢
+## Acknowledgements
 
-- [FaRL](https://github.com/FacePerceiver/FaRL) — 面部表征学习预训练模型
-- [InsightFace](https://github.com/deepinsight/insightface) — 人脸检测与分析工具箱
-- [Faceptor](https://github.com/lxq1000/Faceptor.git)— 多任务人脸感知模型
+- [FaRL](https://github.com/FacePerceiver/FaRL) — Facial representation learning via pre-training
+- [InsightFace](https://github.com/deepinsight/insightface) — Face detection and analysis toolkit
+- [Faceptor](https://github.com/lxq1000/Faceptor.git) — Multi-task face perception model
