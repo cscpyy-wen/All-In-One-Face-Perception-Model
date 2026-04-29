@@ -1,6 +1,7 @@
 # All-In-One Multi-Task Face Perception Model
 
-A unified multi-task face perception model based on Vision Transformer. A single forward pass performs **6 face analysis tasks** simultaneously:
+A unified multi-task face perception model based on Vision Transformer. This project's model is based on the Faceptor framework.
+A single forward pass performs **6 face analysis tasks** simultaneously:
 
 | Task |
 |---|
